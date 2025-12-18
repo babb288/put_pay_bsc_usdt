@@ -39,7 +39,7 @@ class Put
         $res = $this->curlpost($data['notify_url'], $params);
 
         if($res === 'OK'){
-            $this->order->where('system_order', $data['merchant_order'])->update(['status'=>1]);
+            $this->order->where('system_order', $data['system_order'])->update(['status'=>1]);
             $job->delete();
         }else{
             $job->release(3);

@@ -119,7 +119,7 @@ class Block
             'price'             => $log_array['amount'],
             'txid'              => $log_array['transactionHash'],
             'body'              => $address_data['body'],
-            'status'            => 1,
+            'status'            => 2,
             'update_time'       => time()
         ];
 
