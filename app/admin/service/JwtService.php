@@ -31,8 +31,7 @@ class JwtService
             new Sha256(),
             InMemory::plainText(config('jwt.key'))
         );
-        var_dump(config('jwt.key'));
-        exit();
+
         $this->expire = config('jwt.expire');
     }
 
