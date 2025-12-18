@@ -27,6 +27,7 @@ class Login
         if(!$user_find){
             return json(array('code'=>-1,'msg'=>'用户名或密码不正确'));
         }
+
         $token = $this->jwtService->generateToken(
             $this->request,
             array('username'=>$params['username'],'ip'=>$this->request->ip())
