@@ -1,0 +1,129 @@
+{
+  "homeInfo": {
+    "title": "统计报表",
+    "href": "/admin/report"
+  },
+  "logoInfo": {
+    "title": "后台管理",
+    "image": "/static/images/logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "",
+      "icon": "fa fa-th-large",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "商户管理",
+          "href": "",
+          "icon": "fa fa-building",
+          "target": "_self",
+          "child": [
+            {
+              "title": "商户列表",
+              "href": "/merchant/index",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "钱包与归集",
+          "href": "",
+          "icon": "fa fa-credit-card",
+          "target": "_self",
+          "child": [
+            {
+              "title": "钱包列表",
+              "href": "/wallet/index",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "一键归集",
+              "href": "/wallet/collect",
+              "icon": "fa fa-exchange",
+              "target": "_self"
+            },
+            {
+              "title": "归集任务",
+              "href": "/collect_task/index",
+              "icon": "fa fa-tasks",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "地址与授权",
+          "href": "",
+          "icon": "fa fa-map-marker",
+          "target": "_self",
+          "child": [
+            {
+              "title": "地址列表",
+              "href": "/address/index",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "授权任务",
+              "href": "/authorization_task/index",
+              "icon": "fa fa-tasks",
+              "target": "_self"
+            },
+            {
+              "title": "授权明细",
+              "href": "/authorization_detail/index",
+              "icon": "fa fa-key",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "下发明细",
+          "href": "",
+          "icon": "fa fa-paper-plane",
+          "target": "_self",
+          "child": [
+            {
+              "title": "明细列表",
+              "href": "/send_detail/index",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "代收订单",
+          "href": "",
+          "icon": "fa fa-file-text-o",
+          "target": "_self",
+          "child": [
+            {
+              "title": "订单列表",
+              "href": "/order/index",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "代付订单",
+          "href": "",
+          "icon": "fa fa-credit-card-alt",
+          "target": "_self",
+          "child": [
+            {
+              "title": "订单列表",
+              "href": "/apply/index",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "homeInfo": {
+    "title": "统计报表",
+    "href": "/admin/report"
+  },
+  "logoInfo": {
+    "title": "代理后台",
+    "image": "/static/images/logo.webp",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "投注订单",
+          "href": "/admin/betList",
+          "icon": "fa fa-asterisk",
+          "target": "_self"
+        },
+        {
+          "title": "用户管理",
+          "href": "",
+          "icon": "fa fa-asterisk",
+          "target": "_self",
+          "child": [
+            {
+              "title": "用户列表",
+              "href": "/admin/userList",
+              "icon": "fa fa-asterisk",
+              "target": "_self"
+            },
+            {
+              "title": "账变明细",
+              "href": "/admin/changeList",
+              "icon": "fa fa-asterisk",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "竞彩足球",
+          "href": "",
+          "icon": "fa fa-asterisk",
+          "target": "_self",
+          "child": [
+            {
+              "title": "足球赛事",
+              "href": "/admin/footBallMatchList",
+              "icon": "fa fa-asterisk",
+              "target": "_self"
+            },
+            {
+              "title": "足球注单",
+              "href": "/admin/FootBallBetList",
+              "icon": "fa fa-asterisk",
+              "target": "_self"
+            },
+            {
+              "title": "足球结果",
+              "href": "/admin/footBallPrizeList",
+              "icon": "fa fa-asterisk",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "充值管理",
+          "href": "",
+          "icon": "fa fa-asterisk",
+          "target": "_self",
+          "child": [
+            {
+              "title": "充值记录",
+              "href": "/admin/rechargeList",
+              "icon": "fa fa-asterisk",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "提现记录",
+          "href": "/admin/withdrawList",
+          "icon": "fa fa-asterisk",
+          "target": "_self"
+        }
+      ]
+    }
+  ]
+}
