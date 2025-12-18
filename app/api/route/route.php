@@ -7,9 +7,8 @@ use app\api\middleware\Validate;
 
 Route::group(function(){
 
-    Route::rule('put/index','put/index');
-    Route::rule('pay/index','pay/index');
-
+    Route::rule('pay/collection/order','put/index');
+    Route::rule('/pay/apply','pay/index');
 
 
 })->middleware(Validate::class);
