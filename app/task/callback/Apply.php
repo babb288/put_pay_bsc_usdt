@@ -64,7 +64,7 @@ class Apply
                     'txid'      => $hash,
                     'status'    => 2
                 ]);
-                return Queue::push('\app\task\callback\Pay', $data, 'pay');
+                return Queue::push('\app\task\callback\Pay', $apply_find_result->toArray(), 'pay');
             }
 
             // 交易失败（false或null），更新订单状态
