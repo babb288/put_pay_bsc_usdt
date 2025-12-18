@@ -98,15 +98,16 @@
             {{# if(d.status == 0){ }}
                 <span class="layui-badge" style="background-color: #FF9800; font-weight: bold;">待支付</span>
             {{# } else if(d.status == 1){ }}
-                <span class="layui-badge" style="background-color: #4CAF50; font-weight: bold;">已支付</span>
+                <span class="layui-badge" style="background-color: #4CAF50; font-weight: bold;">订单完成</span>
             {{# } else if(d.status == 2){ }}
-                <span class="layui-badge layui-bg-red">已失败</span>
+                <span class="layui-badge layui-bg-red">等待通知</span>
             {{# } else if(d.status == 3){ }}
-                <span class="layui-badge layui-bg-gray">已取消</span>
+                <span class="layui-badge layui-bg-gray">通知失败</span>
             {{# } else { }}
                 <span class="layui-badge layui-bg-black">未知</span>
             {{# } }}
         </script>
+
 
     </div>
 </div>
