@@ -1,0 +1,215 @@
+<?php /*a:1:{s:71:"C:\Users\bbab\PhpstormProjects\binance0\app\admin\view\order\index.html";i:1766030971;}*/ ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>代收订单列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/public.css" media="all">
+    <style type="text/css">
+        .table-header-fixed {
+            position: fixed;
+            top: 0;
+            z-index: 99
+        }
+
+        .layui-table-cell {
+            line-height: 24px !important;
+            vertical-align: middle !important;
+            height: auto !important;
+            overflow: visible !important;
+            text-overflow: inherit !important;
+            white-space: normal !important;
+            word-break: break-all !important;
+            word-wrap: break-word !important;
+            padding: 8px 15px !important;
+            max-width: none !important;
+        }
+
+        .layui-table td, .layui-table th {
+            padding: 0 !important;
+        }
+
+        .layui-table-body .layui-table-cell {
+            min-height: 40px;
+        }
+
+        .layui-table-view .layui-table-body td {
+            white-space: normal !important;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend></legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">系统订单号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="system_order" placeholder="请输入系统订单号" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">钱包地址</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="address" placeholder="请输入钱包地址" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-inline">
+                                <select name="status" lay-filter="status">
+                                    <option value="">全部</option>
+                                    <option value="0">待支付</option>
+                                    <option value="1">已支付</option>
+                                    <option value="2">已失败</option>
+                                    <option value="3">已取消</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <!-- 工具栏为空 -->
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="statusTpl">
+            {{# if(d.status == 0){ }}
+                <span class="layui-badge" style="background-color: #FF9800; font-weight: bold;">待支付</span>
+            {{# } else if(d.status == 1){ }}
+                <span class="layui-badge" style="background-color: #4CAF50; font-weight: bold;">已支付</span>
+            {{# } else if(d.status == 2){ }}
+                <span class="layui-badge layui-bg-red">已失败</span>
+            {{# } else if(d.status == 3){ }}
+                <span class="layui-badge layui-bg-gray">已取消</span>
+            {{# } else { }}
+                <span class="layui-badge layui-bg-black">未知</span>
+            {{# } }}
+        </script>
+
+    </div>
+</div>
+<script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+
+<script>
+    layui.use(['form', 'table', 'layer', 'jquery'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            layer = layui.layer;
+
+        table.render({
+            elem: '#currentTableId',
+            url: '/order/list',
+            toolbar: '#toolbarDemo',
+            cellMinWidth: 80,
+            totalRow: true,
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [[
+                {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left', align: 'center', totalRowText: '合计'},
+                {field: 'username', title: '用户名', minWidth: 150, align: 'center'},
+                {field: 'system_order', title: '系统订单号', minWidth: 200, align: 'center', templet: function(d){
+                    return '<div style=\"word-break: break-all;\">' + (d.system_order || '-') + '</div>';
+                }},
+                {field: 'network', title: '网络类型', width: 100, align: 'center'},
+                {field: 'type', title: '类型', width: 100, align: 'center'},
+                {field: 'pay_address', title: '支付地址', minWidth: 250, align: 'center', templet: function(d){
+                    return '<div style=\"word-break: break-all;\">' + (d.pay_address || '-') + '</div>';
+                }},
+                {field: 'address', title: '钱包地址', minWidth: 250, align: 'center', templet: function(d){
+                    return '<div style=\"word-break: break-all;\">' + (d.address || '-') + '</div>';
+                }},
+                {field: 'price', title: '订单金额', width: 150, align: 'center', totalRow: true, templet: function(d){
+                    if(!d.price) return '<span style=\"color: red;\">0</span>';
+                    var amount = parseFloat(d.price);
+                    var amountStr = amount % 1 === 0 ? amount.toString() : amount.toFixed(2);
+                    return '<span style=\"color: red; font-weight: bold;\">' + amountStr + '</span>';
+                }},
+                {field: 'txid', title: '交易哈希', minWidth: 260, align: 'center', templet: function(d){
+                    if(d.txid) {
+                        return '<a href=\"https://bscscan.com/tx/' + d.txid + '\" target=\"_blank\" style=\"color: #1890ff; word-break: break-all;\">' + d.txid + '</a>';
+                    }
+                    return '-';
+                }},
+                {field: 'body', title: '订单描述', minWidth: 200, align: 'center', templet: function(d){
+                    return '<div style=\"word-break: break-all;\">' + (d.body || '-') + '</div>';
+                }},
+                {field: 'status', title: '状态', width: 120, align: 'center', templet: '#statusTpl'},
+                {field: 'create_time', title: '创建时间', width: 180, align: 'center'},
+                {field: 'update_time', title: '更新时间', width: 180, align: 'center'}
+            ]],
+            limits: [10, 20, 30, 50, 100, 500],
+            limit: 10,
+            page: true,
+            skin: 'line',
+            done: function (index, layero) {
+                $(".layui-table-header tr").resize(function () {
+                    $(".layui-table-header tr").each(function (index, val) {
+                        $($(".layui-table-fixed .layui-table-header table tr")[index]).height($(val).height());
+                    });
+                });
+                $(".layui-table-header tr").each(function (index, val) {
+                    $($(".layui-table-fixed .layui-table-header table tr")[index]).height($(val).height());
+                });
+
+                $(".layui-table-body tr").resize(function () {
+                    $(".layui-table-body tr").each(function (index, val) {
+                        $($(".layui-table-fixed .layui-table-body table tr")[index]).height($(val).height());
+                    });
+                });
+                $(".layui-table-body tr").each(function (index, val) {
+                    $($(".layui-table-fixed .layui-table-body table tr")[index]).height($(val).height());
+                });
+            }
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            let result = data.field;
+            for (const key in result) {
+                if (result[key] === "") {
+                    delete result[key];
+                }
+            }
+            result = JSON.stringify(data.field);
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                },
+                where: {
+                    searchParams: result
+                }
+            }, 'data');
+            return false;
+        });
+
+    });
+</script>
+
+</body>
+</html>
+
+

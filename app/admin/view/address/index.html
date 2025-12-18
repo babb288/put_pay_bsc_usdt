@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>地址列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/public.css" media="all">
+    <style type="text/css">
+        .table-header-fixed {
+            position: fixed;
+            top: 0;
+            z-index: 99
+        }
+
+        .layui-table-cell {
+            line-height: 24px !important;
+            vertical-align: middle !important;
+            height: auto !important;
+            overflow: visible !important;
+            text-overflow: inherit !important;
+            white-space: normal !important;
+            word-break: break-all !important;
+            word-wrap: break-word !important;
+            padding: 8px 15px !important;
+            max-width: none !important;
+        }
+
+        .layui-table td, .layui-table th {
+            padding: 0 !important;
+        }
+
+        .layui-table-body .layui-table-cell {
+            min-height: 40px;
+        }
+
+        /* 确保长文本可以完全显示 */
+        .layui-table-view .layui-table-body td {
+            white-space: normal !important;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend></legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">地址</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="address" placeholder="请输入地址" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-inline">
+                                <select name="status" lay-filter="type">
+                                    <option value="" class="center">全部</option>
+                                    <option value="1" class="center">正常</option>
+                                    <option value="0" class="center">禁用</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">授权状态</label>
+                            <div class="layui-input-inline">
+                                <select name="is_authorized" lay-filter="type">
+                                    <option value="" class="center">全部</option>
+                                    <option value="1" class="center">已授权</option>
+                                    <option value="0" class="center">未授权</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="addAuthTask">添加检测授权任务</button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="statusTpl">
+            {{# if(d.status == 1){ }}
+                <span class="layui-badge layui-bg-green">正常</span>
+            {{# } else { }}
+                <span class="layui-badge layui-bg-gray">禁用</span>
+            {{# } }}
+        </script>
+
+        <script type="text/html" id="authorizedTpl">
+            {{# if(d.is_authorized == 1){ }}
+                <span class="layui-badge layui-bg-blue">已授权</span>
+            {{# } else { }}
+                <span class="layui-badge layui-bg-gray">未授权</span>
+            {{# } }}
+        </script>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="refreshBalance">刷新余额</a>
+            <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="checkAuth">检测授权</a>
+            {{# if(d.status == 1){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="disable">禁用</a>
+            {{# } else { }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="enable">启用</a>
+            {{# } }}
+        </script>
+
+    </div>
+</div>
+<script src="/static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+
+<script>
+    layui.use(['form', 'table', 'layer', 'jquery'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            layer = layui.layer;
+
+        // 加载商户列表到弹窗
+        function loadMerchantListForDialog(callback) {
+            $.get('/address/getMerchantList', function(res){
+                if(res.code == 1 && res.data){
+                    var html = '<option value="">请选择商户</option>';
+                    res.data.forEach(function(item){
+                        html += '<option value="' + item.username + '">' + item.username + '</option>';
+                    });
+                    if(callback) callback(html);
+                }
+            });
+        }
+
+        table.render({
+            elem: '#currentTableId',
+            url: '/address/list',
+            toolbar: '#toolbarDemo',
+            cellMinWidth: 80,
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [[
+                {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left', align: 'center'},
+                {field: 'username', title: '用户名', minWidth: 150, align: 'center'},
+                {field: 'address', title: '地址', minWidth: 250, align: 'center', templet: function(d){
+                    return '<div style="word-break: break-all;">' + (d.address || '-') + '</div>';
+                }},
+                {field: 'balance', title: '代币余额', width: 150, align: 'center', templet: function(d){
+                    return d.balance ? parseFloat(d.balance).toFixed(6) : '0.000000';
+                }},
+                {field: 'bnb_balance', title: 'BNB余额', width: 150, align: 'center', templet: function(d){
+                    return d.bnb_balance ? parseFloat(d.bnb_balance).toFixed(6) : '0.000000';
+                }},
+                {field: 'callback_url', title: '回调地址', minWidth: 200, align: 'center', templet: function(d){
+                    return '<div style="word-break: break-all;">' + (d.callback_url || '-') + '</div>';
+                }},
+                {field: 'redirect_url', title: '跳转地址', minWidth: 200, align: 'center', templet: function(d){
+                    return '<div style="word-break: break-all;">' + (d.redirect_url || '-') + '</div>';
+                }},
+                {field: 'status', title: '状态', width: 100, align: 'center', templet: '#statusTpl'},
+                {field: 'is_authorized', title: '授权状态', width: 120, align: 'center', templet: '#authorizedTpl'},
+                {field: 'create_time', title: '创建时间', width: 180, align: 'center'},
+                {field: 'update_time', title: '更新时间', width: 180, align: 'center'},
+                {title: '操作', width: 220, templet: '#currentTableBar', fixed: "right", align: "center"}
+            ]],
+            limits: [10, 20, 30, 50, 100, 500],
+            limit: 10,
+            page: true,
+            done: function (index, layero) {
+                //表头部分
+                //动态监听表头高度变化，冻结行跟着改变高度
+                $(".layui-table-header  tr").resize(function () {
+                    $(".layui-table-header  tr").each(function (index, val) {
+                        $($(".layui-table-fixed .layui-table-header table tr")[index]).height($(val).height());
+                    });
+                });
+                //初始化高度，使得冻结行表头高度一致
+                $(".layui-table-header  tr").each(function (index, val) {
+                    $($(".layui-table-fixed .layui-table-header table tr")[index]).height($(val).height());
+                });
+                //表体部分
+                //动态监听表体高度变化，冻结行跟着改变高度
+                $(".layui-table-body  tr").resize(function () {
+                    $(".layui-table-body  tr").each(function (index, val) {
+                        $($(".layui-table-fixed .layui-table-body table tr")[index]).height($(val).height());
+                    });
+                });
+                //初始化高度，使得冻结行表体高度一致
+                $(".layui-table-body  tr").each(function (index, val) {
+                    $($(".layui-table-fixed .layui-table-body table tr")[index]).height($(val).height());
+                });
+            },
+            skin: 'line'
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            let result = data.field;
+            for (const key in result) {
+                if (result[key] === "") {
+                    delete result[key];
+                }
+            }
+            result = JSON.stringify(data.field);
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                },
+                where: {
+                    searchParams: result
+                }
+            }, 'data');
+            return false;
+        });
+        
+        // 监听工具栏事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'addAuthTask') {
+                // 先加载商户列表
+                loadMerchantListForDialog(function(merchantOptions){
+                    var dialogHtml = '<div style="padding: 30px 20px;">' +
+                        '<form class="layui-form" lay-filter="addAuthTaskForm" style="margin-top: 20px;">' +
+                        '<div class="layui-form-item">' +
+                        '<label class="layui-form-label" style="width: 120px;"><span style="color: red;">*</span>选择商户</label>' +
+                        '<div class="layui-input-block" style="margin-left: 150px;">' +
+                        '<select name="username" lay-verify="required" id="dialogMerchantSelect" style="width: 100%;">' +
+                        merchantOptions +
+                        '</select>' +
+                        '<div class="layui-form-mid layui-word-aux" style="padding-top: 5px;">请选择要添加授权任务的商户</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</form>' +
+                        '</div>';
+                    
+                    layer.open({
+                        type: 1,
+                        title: '添加检测授权任务',
+                        content: dialogHtml,
+                        area: ['550px', '300px'],
+                        btn: ['确定', '取消'],
+                        yes: function(index, layero){
+                            var formData = form.val('addAuthTaskForm');
+                            var username = formData.username;
+                            
+                            if(!username){
+                                layer.msg('请选择商户', {icon: 2});
+                                return;
+                            }
+                            
+                            var loadIndex = layer.load(1, {shade: [0.5, '#000']});
+                            $.post('/address/addAuthTask', {username: username}, function(res){
+                                layer.close(loadIndex);
+                                if(res.code == 1){
+                                    layer.msg(res.msg || '添加任务成功', {icon: 1});
+                                    layer.close(index);
+                                    table.reload('currentTableId');
+                                } else {
+                                    layer.msg(res.msg || '添加任务失败', {icon: 2});
+                                }
+                            }).fail(function(){
+                                layer.close(loadIndex);
+                                layer.msg('网络错误', {icon: 2});
+                            });
+                        },
+                        success: function(layero, index){
+                            // 重新渲染表单
+                            form.render('select');
+                        }
+                    });
+                });
+            }
+        });
+        
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            
+            if (obj.event === 'refreshBalance') {
+                var loadIndex = layer.load(1, {shade: [0.5, '#000']});
+                $.post('/address/refreshBalance', {id: data.id}, function(res){
+                    layer.close(loadIndex);
+                    if(res.code == 1){
+                        layer.msg('刷新成功', {icon: 1});
+                        table.reload('currentTableId');
+                    } else {
+                        layer.msg(res.msg || '刷新失败', {icon: 2});
+                    }
+                }).fail(function(){
+                    layer.close(loadIndex);
+                    layer.msg('网络错误', {icon: 2});
+                });
+            } else if (obj.event === 'disable') {
+                $.post('/address/updateStatus', {
+                    id: data.id,
+                    status: 0
+                }, function(res){
+                    if(res.code == 1){
+                        layer.msg('已禁用', {icon: 1});
+                        table.reload('currentTableId');
+                    } else {
+                        layer.msg(res.msg || '操作失败', {icon: 2});
+                    }
+                });
+            } else if (obj.event === 'enable') {
+                $.post('/address/updateStatus', {
+                    id: data.id,
+                    status: 1
+                }, function(res){
+                    if(res.code == 1){
+                        layer.msg('已启用', {icon: 1});
+                        table.reload('currentTableId');
+                    } else {
+                        layer.msg(res.msg || '操作失败', {icon: 2});
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
