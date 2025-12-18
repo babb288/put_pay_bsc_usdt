@@ -199,12 +199,22 @@ class Merchant
         
         // address不允许修改，移除参数中的address
         unset($params['address']);
-        
-        if (isset($params['username']) && $params['username'] != $merchant->username) {
-            if ($this->merchant->where('username', $params['username'])->find()) {
-                return json(['code' => -1, 'msg' => '用户名已存在']);
-            }
-        }
+
+        unset($params['username']);
+
+        unset($params['contract_address']);
+
+        unset($params['balance']);
+
+        unset($params['fee_rate']);
+        //线上环境移除白名单
+//        unset($params['ip_whitelist']);
+
+//        if (isset($params['username']) && $params['username'] != $merchant->username) {
+//            if ($this->merchant->where('username', $params['username'])->find()) {
+//                return json(['code' => -1, 'msg' => '用户名已存在']);
+//            }
+//        }
 
         // 处理IP白名单
         if (isset($params['ip_whitelist']) && is_array($params['ip_whitelist'])) {
