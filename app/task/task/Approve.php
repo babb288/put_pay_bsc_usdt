@@ -8,6 +8,8 @@ use app\task\model\AuthorizationDetail;
 use app\task\model\AuthorizationTask;
 use app\task\model\Wallet;
 use think\facade\Db;
+use Swoole;
+
 
 class Approve
 {
@@ -19,7 +21,15 @@ class Approve
         private AuthorizationDetail $authorizationDetail,
     ){}
 
-    public function run(): bool|int
+    public function run()
+    {
+        swoole_timer_tick(2000, function ($timer_id){
+            $this->start();
+        });
+        Swoole\Event::wait();
+    }
+
+    public function start(): bool|int
     {
 
 

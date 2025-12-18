@@ -6,6 +6,7 @@ namespace app\task\task;
 use app\Bsc;
 use app\task\model\Address;
 use app\task\model\AuthorizationDetail as AuthorizationDetailModel;
+use Swoole;
 
 
 class AuthorizationDetail
@@ -19,7 +20,15 @@ class AuthorizationDetail
     ){}
 
 
-    public function run(): bool|int
+    public function run()
+    {
+        swoole_timer_tick(2000, function ($timer_id){
+            $this->start();
+        });
+        Swoole\Event::wait();
+    }
+
+    public function start(): bool|int
     {
 
 

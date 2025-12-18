@@ -4,13 +4,12 @@ namespace app\task\task;
 
 use app\api\model\Address;
 use app\api\model\Order;
-use app\Bsc;
 use app\task\model\Settings;
 use app\task\service\EvmTransferScanner;
 use think\facade\Cache;
 use think\facade\Db;
 use think\facade\Queue;
-
+use Swoole;
 
 class Block
 {
@@ -26,7 +25,15 @@ class Block
 
     public function run(): void
     {
+        swoole_timer_tick(2000, function ($timer_id){
+            $this->start();
+        });
+        Swoole\Event::wait();
+    }
 
+
+    public function start()
+    {
         try {
 
             $settings = $this->getSettings();
@@ -65,7 +72,6 @@ class Block
         } catch (\Exception $e) {
             echo "错误: " . $e->getMessage() . "\n";
         }
-
     }
 
 
