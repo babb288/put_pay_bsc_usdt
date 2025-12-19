@@ -54,6 +54,7 @@ class Merchant
 
         $list = $this->merchant->where($where)
             ->order('id', 'desc')
+            ->hidden(['key'])
             ->paginate([
                 'list_rows' => $limit,
                 'page' => $page,
@@ -82,7 +83,7 @@ class Merchant
     public function editForm(): \think\response\View
     {
         $id = $this->request->param('id', 0);
-        $merchant = $this->merchant->find($id);
+        $merchant = $this->merchant->hidden(['key'])->find($id);
         
         if (!$merchant) {
             return view('merchant/error', ['msg' => '商户不存在']);
