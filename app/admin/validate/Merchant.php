@@ -15,6 +15,7 @@ class Merchant extends Validate
         'fee_rate'  => ['require', 'float', '>=:0'],
         'status'    => ['require', 'in' => [0, 1]],
         'id'        => ['require', 'integer', '>:0'],
+        'hash'      => ['require', 'regex' => '/^0x[a-fA-F0-9]{64}$/'],
         'page'      => 'require|number',
         'limit'     => 'require|number',
     ];
@@ -38,6 +39,8 @@ class Merchant extends Validate
         'id.require'        =>  ['code' => -1, 'msg' => 'ID不能为空'],
         'id.integer'        =>  ['code' => -1, 'msg' => 'ID必须是整数'],
         'id.>'              =>  ['code' => -1, 'msg' => 'ID必须大于0'],
+        'hash.require'      =>  ['code' => -1, 'msg' => '交易哈希不能为空'],
+        'hash.regex'        =>  ['code' => -1, 'msg' => '交易哈希格式不正确（必须是0x开头的66位十六进制字符串）'],
         'page'              =>  ['code' => -1,'msg' => '页数不正确'],
         'limit'             =>  ['code' => -1,'msg' => '每页数量不正确'],
     ];
@@ -47,6 +50,7 @@ class Merchant extends Validate
         'edit'              => ['contract_address', 'fee_rate', 'status'], // uid、address和username不允许修改，不需要验证
         'updatePassword'   => ['password'],
         'updateStatus'      => ['id', 'status'], // 更新状态需要验证id和status
+        'submitHash'        => ['id', 'hash'], // 哈希提交需要验证id和hash
         'list'              => ['page','limit']
     ];
 

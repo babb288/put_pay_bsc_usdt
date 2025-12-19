@@ -130,7 +130,22 @@ class Bsc
 
     }
 
+    public function getTransactionReceiptConnect(string $hash)
+    {
+        $receipt = null;
 
+        $this->web3->eth->getTransactionReceipt($hash,function($err,$result) use(&$receipt) {
+
+            if($err !== null) {
+                echo "RPC error: " . $err->getMessage();
+                return ;
+            }
+
+            $receipt = $result;
+        });
+
+        return $receipt;
+    }
     public function getTransactionReceipt(string $hash)
     {
         $receipt = null;

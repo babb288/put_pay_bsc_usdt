@@ -100,6 +100,7 @@
         <script type="text/html" id="currentTableBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
             <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="password">修改密码</a>
+            <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="submitHash">哈希提交</a>
             {{# if(d.status == 1){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="disable">禁用</a>
             {{# } else { }}
@@ -284,6 +285,36 @@
                     } else {
                         layer.msg(res.msg || '操作失败', {icon: 2});
                     }
+                });
+            } else if (obj.event === 'submitHash') {
+                layer.prompt({
+                    title: '请输入交易哈希',
+                    formType: 2,
+                    value: '',
+                    area: ['500px', '150px']
+                }, function(value, index){
+                    if(!value || value.trim() === ''){
+                        layer.msg('哈希不能为空', {icon: 2});
+                        return;
+                    }
+                    var loadIndex = layer.load(1, {shade: [0.5, '#000']});
+                    $.post('/merchant/submitHash', {
+                        id: data.id,
+                        hash: value.trim()
+                    }, function(res){
+                        layer.close(loadIndex);
+                        layer.close(index);
+                        if(res.code == 1){
+                            layer.msg('哈希提交成功', {icon: 1});
+                            table.reload('currentTableId');
+                        } else {
+                            layer.msg(res.msg || '哈希提交失败', {icon: 2});
+                        }
+                    }).fail(function(){
+                        layer.close(loadIndex);
+                        layer.close(index);
+                        layer.msg('网络错误', {icon: 2});
+                    });
                 });
             }
         });

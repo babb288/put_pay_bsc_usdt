@@ -107,7 +107,9 @@ class CollectTask
             if ($task->contract_fee > 0) {
                 $this->merchant
                     ->where('username', $task->username)
-                    ->update(['balance' => Db::raw('+'.$task->contract_fee)]);
+                    ->update([
+                        'balance' => Db::raw('balance+'.$task->contract_fee)
+                    ]);
             }
 
             $task->status = 3; // 失败

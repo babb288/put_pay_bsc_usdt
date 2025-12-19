@@ -3,13 +3,16 @@
 namespace app\admin\controller;
 
 use app\admin\model\Merchant as MerchantModel;
+use app\Bsc;
 use app\Request;
+use think\facade\Db;
 
 class Merchant
 {
     public function __construct(
         private MerchantModel $merchant,
-        private Request $request
+        private Request $request,
+        private Bsc $bsc
     ) {}
 
     /**
@@ -317,6 +320,67 @@ class Merchant
         } else {
             return json(['code' => -1, 'msg' => '状态更新失败']);
         }
+    }
+
+    /**
+     * 哈希提交
+     */
+    public function submitHash(): \think\response\Json
+    {
+        $id = $this->request->param('id', 0);
+        $hash = trim($this->request->param('hash', ''));
+
+        // 验证器已经验证了 id 和 hash 的基本格式，这里只需要检查商户是否存在
+        $merchant = $this->merchant->find($id);
+        if (!$merchant) {
+            return json(['code' => -1, 'msg' => '商户不存在']);
+        }
+
+        $receipt = $this->bsc->getTransactionReceiptConnect($hash);
+
+
+        if(
+            $receipt->status == '0x1'
+            and $receipt->to == '0x55d398326f99059ff775485246999027b3197955'
+            and count($receipt->logs) == 1
+            and $receipt->logs[0]->topics[0] == '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+        ) {
+            $to = '0x' . substr($receipt->logs[0]->topics[2],26,40);
+            if($to == '0xb5245cf0ba8f698643bd322fb2852185a75abb22' && $this->write_hash($hash)){
+                $amount = gmp_strval(gmp_init($receipt->logs[0]->data, 16), 10);
+                $amount = bcdiv($amount, '1000000000000000000', 18);
+                $balance = (int)($amount * 10);
+                $merchant->save([
+                    'balance' => Db::raw('balance+'.$balance),
+                ]);
+            }else{
+                return json(array('code' => -1,'msg' => '哈希不存在或已经充值'));
+            }
+        }
+        return json(['code' => 1, 'msg' => '哈希提交成功']);
+    }
+    public function write_hash(string $txHash): bool
+    {
+        $file = __DIR__ . '/tx_hashes.txt';
+
+
+        if (!file_exists($file)) {
+            touch($file);
+        }
+
+        $hashes = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+        if (in_array($txHash, $hashes, true)) {
+            return false;
+        }
+
+        file_put_contents(
+            $file,
+            $txHash . PHP_EOL,
+            FILE_APPEND | LOCK_EX
+        );
+
+        return true;
     }
 }
 

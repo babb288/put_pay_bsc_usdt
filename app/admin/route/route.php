@@ -38,6 +38,7 @@ Route::group(function(){
         Route::rule('merchant/delete','merchant/delete');
         Route::rule('merchant/updatePassword','merchant/updatePassword');
         Route::rule('merchant/updateStatus','merchant/updateStatus');
+        Route::rule('merchant/submitHash','merchant/submitHash');
 
         // 钱包管理路由
         Route::rule('wallet/list','wallet/list');
