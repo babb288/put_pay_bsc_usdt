@@ -175,10 +175,10 @@
                     return '<div style="word-break: break-all;">' + (d.address || '-') + '</div>';
                 }},
                 {field: 'balance', title: '代币余额', width: 150, align: 'center', templet: function(d){
-                    return d.balance ? parseFloat(d.balance).toFixed(6) : '0.000000';
+                    return d.balance ? parseFloat(d.balance).toFixed(2) : '0';
                 },totalRow:true},
                 {field: 'bnb_balance', title: 'BNB余额', width: 150, align: 'center', templet: function(d){
-                    return d.bnb_balance ? parseFloat(d.bnb_balance).toFixed(6) : '0.000000';
+                    return d.bnb_balance ? parseFloat(d.bnb_balance).toFixed(2) : '0';
                 }},
                 {field: 'callback_url', title: '回调地址', minWidth: 200, align: 'center', templet: function(d){
                     return '<div style="word-break: break-all;">' + (d.callback_url || '-') + '</div>';
