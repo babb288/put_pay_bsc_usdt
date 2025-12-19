@@ -47,7 +47,7 @@ class AuthorizationDetail
 
             }
 
-            if($balance >= 0.00007){
+            if($balance >= 0.00001){
                 $authorization_detail_result->is_bnb = 1;
                return $authorization_detail_result->save();
             }

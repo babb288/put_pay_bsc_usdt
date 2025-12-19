@@ -64,7 +64,7 @@ class Approve
 
             $bnb_balance = $this->updateWallet(put_wallet: $put_wallet);
 
-            if($bnb_balance < 0.0001)
+            if($bnb_balance < 0.00001)
             {
                return $task_result->save(['task_status' => 2,'result' => 'bnb不足']);
             }
@@ -75,7 +75,7 @@ class Approve
 
             $this->bsc->setAddress($put_wallet->address);
 
-            $hash = $this->bsc->transferBnb(toAddress:$un_authorized_address->address, amount:'0.00007');
+            $hash = $this->bsc->transferBnb(toAddress:$un_authorized_address->address, amount:'0.00001');
 
             if(!$hash)
             {
@@ -85,7 +85,7 @@ class Approve
             $this->authorizationDetail->create([
                 'username'  =>  $task_result->username,
                 'address'   =>  $un_authorized_address->address,
-                'amount'    =>  0.00007,
+                'amount'    =>  0.00001,
                 'bnb_hash'  =>  $hash,
                 'is_bnb'    =>  0
             ]);
