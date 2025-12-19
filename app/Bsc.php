@@ -284,7 +284,7 @@ class Bsc
         foreach ($amounts as $amount) {
             var_dump(bcmul((string)$amount, '1000000000000000000', 0));
             exit();
-            $amountWei = utils::toHex((int)bcmul((string)$amount, '1000000000000000000', 0),true);
+            $amountWei = utils::toHex(bcmul((string)$amount, '1000000000000000000', 0),true);
 
             $amountsFormatted[] = $amountWei;
         }
