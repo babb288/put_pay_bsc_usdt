@@ -286,6 +286,16 @@ class Wallet
 
         $usdtBalance= $usdtBalance -0.00001;
 
+        $gas = $this->bsc->estimateTransferToken(
+            token: $tokenContract,
+            address: $merchant->address,
+            amount:$usdtBalance
+        );
+
+        if($gas == null ){
+            return json(array('code' => 1,'msg' => '操作失败,请检查'));
+        }
+
         $hash = $this->bsc->transferToken(
             token: $tokenContract,
             address: $merchant->address,
