@@ -47,6 +47,11 @@ class Address
         $address = $searchParams['address'] ?? $params['address'] ?? '';
         $status = $searchParams['status'] ?? $params['status'] ?? '';
         $isAuthorized = $searchParams['is_authorized'] ?? $params['is_authorized'] ?? '';
+        $order = ['id' => 'desc'];
+
+        if(isset($searchParams['sort'])){
+            $order = ['balance' => $searchParams['sort']];
+        }
 
         $where = [];
         if ($username) {
@@ -58,12 +63,13 @@ class Address
         if ($status !== '') {
             $where[] = ['status', '=', $status];
         }
+
         if ($isAuthorized !== '') {
             $where[] = ['is_authorized', '=', $isAuthorized];
         }
 
         $list = $this->address->where($where)
-            ->order('id', 'desc')
+            ->order($order)
             ->paginate([
                 'list_rows' => $limit,
                 'page' => $page,

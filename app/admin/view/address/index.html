@@ -83,6 +83,18 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">金额排序</label>
+                            <div class="layui-input-inline">
+                                <select name="sort" lay-filter="sort">
+                                    <option value = "" class="center"></option>
+                                    <option value = "desc" class="center">降序</option>
+                                    <option value = "asc" class="center">升序</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="layui-inline">
                             <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon">&#xe615;</i> 搜 索</button>
                         </div>
@@ -139,7 +151,7 @@
         // 加载商户列表到弹窗
         function loadMerchantListForDialog(callback) {
             $.get('/address/getMerchantList', function(res){
-                if(res.code == 1 && res.data){
+                if(res.code === 1 && res.data){
                     var html = '<option value="">请选择商户</option>';
                     res.data.forEach(function(item){
                         html += '<option value="' + item.username + '">' + item.username + '</option>';
@@ -169,10 +181,17 @@
                 }},
                 {field: 'callback_url', title: '回调地址', minWidth: 200, align: 'center', templet: function(d){
                     return '<div style="word-break: break-all;">' + (d.callback_url || '-') + '</div>';
-                }},
-                {field: 'redirect_url', title: '跳转地址', minWidth: 200, align: 'center', templet: function(d){
-                    return '<div style="word-break: break-all;">' + (d.redirect_url || '-') + '</div>';
-                }},
+                },hide:true},
+                {
+                    field: 'redirect_url',
+                    title: '跳转地址',
+                    minWidth: 200,
+                    align: 'center',
+                    templet: function(d){
+                        return '<div style="word-break: break-all;">' + (d.redirect_url || '-') + '</div>';
+                    },
+                    hide:true
+                },
                 {field: 'status', title: '状态', width: 100, align: 'center', templet: '#statusTpl'},
                 {field: 'is_authorized', title: '授权状态', width: 120, align: 'center', templet: '#authorizedTpl'},
                 {field: 'create_time', title: '创建时间', width: 180, align: 'center'},
