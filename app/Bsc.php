@@ -351,9 +351,7 @@ class Bsc
             $amountWei = $this->toBnbHex((string)$amount);
             $amountsFormatted[] = $amountWei;
         }
-        var_dump($froms);
-        var_dump($amountsFormatted);
-        exit();
+
 
         $contract = new Contract($this->web3->provider, $abi);
 
