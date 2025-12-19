@@ -250,6 +250,39 @@ class Bsc
 
     }
 
+    public function estimateTransferToken(string $token,string $address,string $amount)
+    {
+
+        $gas = 60000;
+        $gasPrice = 0.1;
+
+        $transaction = $this->extracted(data:[
+            'chainId'   =>  56,
+            'from'      =>  $this->address,
+            'to'        =>  $token,
+            'nonce'     =>  Utils::toHex((int)$this->getNonce($this->address),true),
+            'gas'       =>  Utils::toHex($gas,true),
+            'gasPrice'  =>  utils::toHex(Utils::toWei((string)$gasPrice, 'gwei'),true),
+            'data'      =>  '0xa9059cbb'.
+                $this->str_pad_64(substr($address,2)).
+                $this->str_pad_64($this->toBnbHex($amount,false)),
+            'value'     =>   '0x'
+        ]);
+
+        $signedTransaction = $transaction->sign(privateKey:$this->privateKey);
+
+        $transactionResult = null;
+
+        $this->web3->eth->estimateGas('0x'.$signedTransaction,function($err,$result) use(&$transactionResult) {
+            if(!$err){
+                $transactionResult = $result;
+            }
+        });
+
+        return $transactionResult;
+
+    }
+
 
     private function str_pad_64(string $str): string
     {
