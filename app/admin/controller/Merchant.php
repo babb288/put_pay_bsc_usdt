@@ -54,7 +54,7 @@ class Merchant
 
         $list = $this->merchant->where($where)
             ->order('id', 'desc')
-            ->hidden(['key'])
+            ->hidden(['key','ip'])
             ->paginate([
                 'list_rows' => $limit,
                 'page' => $page,
@@ -95,9 +95,10 @@ class Merchant
             $ipWhitelistArray = json_decode($merchant->ip_whitelist, true) ?: [];
             $ipWhitelistArray=[];
         }
+
         // 转换为换行分隔的字符串用于显示
         $merchant->ip_whitelist_text = implode("\n", $ipWhitelistArray);
-
+        $merchant->key = '';
         return view('merchant/edit', ['merchant' => $merchant]);
     }
 
@@ -209,6 +210,7 @@ class Merchant
         unset($params['balance']);
 
         unset($params['fee_rate']);
+        unset($params['key']);
         //线上环境移除白名单
 //        unset($params['ip_whitelist']);
 
