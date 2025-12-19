@@ -350,7 +350,7 @@ class Bsc
             $amountWei = $this->toBnbHex($amount);
             $amountsFormatted[] = $amountWei;
         }
-
+        var_dump($froms);
         var_dump($amountsFormatted);
         exit();
 
