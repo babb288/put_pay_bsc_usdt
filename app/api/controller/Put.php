@@ -67,6 +67,7 @@ class Put
                 'code'  => 1,
                 'msg'   =>  'success',
                 'data'  =>  [
+                    'native_url' => '0.0.0.0',
                     'to_address' => $address_data['address'],
                 ]
             ]);
