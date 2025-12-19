@@ -361,7 +361,7 @@ class Bsc
         $contract->estimateGas('batchTransferFrom', $tokenContract, $froms, $to, $amountsFormatted,
             ['from' => $this->address],
             function ($err, $result) use (&$gas, &$error) {
-                var_dump($error);
+                var_dump($err);
                 exit();
                 if ($err !== null) {
                     $error = $err;
