@@ -284,10 +284,12 @@ class Wallet
         // 执行USDT下发（全部余额）
         $tokenContract = '0x55d398326f99059fF775485246999027B3197955';
 
+        $usdtBalance= $usdtBalance -0.00001;
+
         $hash = $this->bsc->transferToken(
             token: $tokenContract,
             address: $merchant->address,
-            amount: $usdtBalance
+            amount:$usdtBalance
         );
 
         if ($hash === null) {
