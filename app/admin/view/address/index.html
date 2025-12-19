@@ -57,6 +57,14 @@
                                 <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
                             </div>
                         </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">绑定数据</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="bind_data" placeholder="请输入绑定数据" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
                         <div class="layui-inline">
                             <label class="layui-form-label">地址</label>
                             <div class="layui-input-inline">
@@ -171,6 +179,7 @@
             cols: [[
                 {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left', align: 'center',totalRowText:'合计'},
                 {field: 'username', title: '用户名', minWidth: 150, align: 'center'},
+                {field: 'bind_data', title: '绑定数据', minWidth: 150, align: 'center'},
                 {field: 'address', title: '地址', minWidth: 250, align: 'center', templet: function(d){
                     return '<div style="word-break: break-all;">' + (d.address || '-') + '</div>';
                 }},

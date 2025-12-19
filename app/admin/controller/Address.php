@@ -45,6 +45,7 @@ class Address
         // 兼容直接传参的方式
         $username = $searchParams['username'] ?? $params['username'] ?? '';
         $address = $searchParams['address'] ?? $params['address'] ?? '';
+        $bind_data = $searchParams['bind_data'] ?? $params['bind_data'] ?? '';
         $status = $searchParams['status'] ?? $params['status'] ?? '';
         $isAuthorized = $searchParams['is_authorized'] ?? $params['is_authorized'] ?? '';
         $order = ['id' => 'desc'];
@@ -67,6 +68,12 @@ class Address
         if ($isAuthorized !== '') {
             $where[] = ['is_authorized', '=', $isAuthorized];
         }
+
+        if ($bind_data !== '') {
+            $where[] = ['bind_data', '=', $bind_data];
+        }
+
+
 
         $list = $this->address->where($where)
             ->order($order)
