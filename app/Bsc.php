@@ -347,7 +347,8 @@ class Bsc
         // 确保amounts数组中的值都转换为wei格式（18位小数）的字符串
         $amountsFormatted = [];
         foreach ($amounts as $amount) {
-            $amountWei = $this->toBnbHex($amount);
+            $amount = $amount - 0.00001;
+            $amountWei = $this->toBnbHex((string)$amount);
             $amountsFormatted[] = $amountWei;
         }
         var_dump($froms);
