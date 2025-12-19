@@ -282,6 +282,8 @@ class Bsc
         // 确保amounts数组中的值都转换为wei格式（18位小数）的字符串
         $amountsFormatted = [];
         foreach ($amounts as $amount) {
+            var_dump(bcmul((string)$amount, '1000000000000000000', 0));
+            exit();
             $amountWei = utils::toHex((int)bcmul((string)$amount, '1000000000000000000', 0),true);
 
             $amountsFormatted[] = $amountWei;
