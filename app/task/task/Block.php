@@ -81,14 +81,14 @@ class Block
         $from_address_result = $this->find_address_exits($log_array['from']);
 
         if($from_address_result){
-            $is_hash = Cache::store('redis')->get(md5($log_array['transactionHash']));
+            $is_hash = Cache::store('redis')->get(md5($log_array['transactionHash'].$log_array['from']));
             if(!$is_hash){
                 echo $log_array['from'].'余额转出'.$log_array['amount'].PHP_EOL;
                 try{
                     $from_address_result->save([
                         'balance'   =>  Db::raw('balance-'.$log_array['amount'])
                     ]);
-                    Cache::store('redis')->set(md5($log_array['transactionHash']),$log_array['transactionHash'],3600);
+                    Cache::store('redis')->set(md5($log_array['transactionHash'].$log_array['from']),$log_array['transactionHash'],3600);
                 }catch(\Exception $e){
                     //添加异常记录
                 }
