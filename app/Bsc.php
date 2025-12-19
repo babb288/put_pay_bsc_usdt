@@ -250,37 +250,95 @@ class Bsc
 
     }
 
+    /**
+     * 使用 eth_call 模拟执行转账交易（不实际发送交易）
+     * @param string $token 代币合约地址
+     * @param string $address 接收地址
+     * @param string $amount 转账数量
+     * @return array|null 返回结果或错误信息
+     */
     public function callTransferToken(string $token,string $address,string $amount)
     {
+        // 构建交易数据
+        $data = '0xa9059cbb'.
+            $this->str_pad_64(substr($address,2)).
+            $this->str_pad_64($this->toBnbHex($amount,false));
 
-        $gas = 60000;
-        $gasPrice = 0.1;
-
-        $transaction = $this->extracted(data:[
-            'chainId'   =>  56,
-            'from'      =>  $this->address,
-            'to'        =>  $token,
-            'nonce'     =>  Utils::toHex((int)$this->getNonce($this->address),true),
-            'gas'       =>  Utils::toHex($gas,true),
-            'gasPrice'  =>  utils::toHex(Utils::toWei((string)$gasPrice, 'gwei'),true),
-            'data'      =>  '0xa9059cbb'.
-                $this->str_pad_64(substr($address,2)).
-                $this->str_pad_64($this->toBnbHex($amount,false)),
-            'value'     =>   '0x'
-        ]);
-
-        $signedTransaction = $transaction->sign(privateKey:$this->privateKey);
+        // eth_call 需要传递交易对象，而不是签名的交易字符串
+        $callTransaction = [
+            'from' => $this->address,
+            'to' => $token,
+            'data' => $data,
+            'value' => '0x0'
+        ];
 
         $transactionResult = null;
+        $errorMessage = null;
 
-        $this->web3->eth->call('0x'.$signedTransaction,function($err,$result) use(&$transactionResult) {
-            if(!$err){
-                $transactionResult = $result;
+        // 使用 eth_call 模拟执行（不改变链上状态）
+        $this->web3->eth->call($callTransaction, 'latest', function($err, $result) use(&$transactionResult, &$errorMessage) {
+            if($err !== null){
+                $errorMessage = $err->getMessage();
+                return;
+            }
+            $transactionResult = $result;
+        });
+
+        if($errorMessage !== null) {
+            return $errorMessage;
+        }
+
+        return $transactionResult;
+    }
+
+    /**
+     * 使用 estimateGas 预估转账交易的 gas，判断交易是否会失败
+     * @param string $token 代币合约地址
+     * @param string $address 接收地址
+     * @param string $amount 转账数量
+     * @return array|null 返回预估的gas信息或错误信息
+     */
+    public function estimateTransferTokenGas(string $token,string $address,string $amount)
+    {
+        // 构建交易数据
+        $data = '0xa9059cbb'.
+            $this->str_pad_64(substr($address,2)).
+            $this->str_pad_64($this->toBnbHex($amount,false));
+
+        // estimateGas 需要传递交易对象
+        $estimateTransaction = [
+            'from' => $this->address,
+            'to' => $token,
+            'data' => $data,
+            'value' => '0x0'
+        ];
+
+        $estimatedGas = null;
+        $errorMessage = null;
+
+        // 使用 estimateGas 预估 gas
+        $this->web3->eth->estimateGas($estimateTransaction, function($err, $result) use(&$estimatedGas, &$errorMessage) {
+            if($err !== null){
+                $errorMessage = $err->getMessage();
+                return;
+            }
+            
+            if (is_object($result)) {
+                $estimatedGas = $result->toString();
+            } else {
+                $estimatedGas = (string)$result;
             }
         });
 
-        return $transactionResult;
+        if($errorMessage !== null) {
+            return ['error' => $errorMessage, 'success' => false];
+        }
 
+        return [
+            'estimatedGas' => $estimatedGas,
+            'estimatedGasDecimal' => hexdec($estimatedGas),
+            'success' => true
+        ];
     }
 
 
