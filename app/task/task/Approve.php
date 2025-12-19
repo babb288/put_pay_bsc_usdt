@@ -52,7 +52,7 @@ class Approve
             ->where('username',$task_result->username)
             ->where('status',1)
             ->where('id','>' ,$task_result->index)
-            ->where('balance','>',0)
+            ->where('balance','>',1)
             ->where('is_authorized','=',0)
             ->order('id','asc')
             ->find();

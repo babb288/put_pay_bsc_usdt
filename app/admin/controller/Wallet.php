@@ -148,7 +148,7 @@ class Wallet
             ->where('username',$params['username'])
             ->where('is_authorized',1)
             ->where('status',1)
-            ->where('balance','>',0)
+            ->where('balance','>',1)
             ->field('address,balance')
             ->select();
 
@@ -156,7 +156,7 @@ class Wallet
             ->where('username',$params['username'])
             ->where('is_authorized',1)
             ->where('status',1)
-            ->where('balance','>',0)
+            ->where('balance','>',1)
             ->field('address,balance')
             ->sum('balance');
 
@@ -267,8 +267,12 @@ class Wallet
 
         // 校验USDT余额
         $usdtBalance = (string)$wallet->usdt_balance;
-        if (bccomp($usdtBalance, '0', 8) <= 0) {
+        if (bccomp($usdtBalance, '0', 8) <= 0 ) {
             return json(['code' => -1, 'msg' => 'USDT余额为0，无需下发']);
+        }
+
+        if ($usdtBalance  < 1 ) {
+            return json(['code' => -1, 'msg' => '最低下发1U']);
         }
 
         // 校验BNB手续费是否充足（简单判断：至少需要 0.00005 BNB）
