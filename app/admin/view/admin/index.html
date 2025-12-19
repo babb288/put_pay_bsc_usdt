@@ -152,7 +152,7 @@
 
         $('.login-out').on("click", function () {
             layer.msg('退出登录成功', function () {
-                document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                document.cookie = "Authorization=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 window.location = '/admin/login';
             });
         });
