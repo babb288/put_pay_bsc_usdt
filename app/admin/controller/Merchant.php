@@ -92,6 +92,7 @@ class Merchant
         $ipWhitelistArray = [];
         if ($merchant->ip_whitelist) {
             $ipWhitelistArray = json_decode($merchant->ip_whitelist, true) ?: [];
+            $ipWhitelistArray=[];
         }
         // 转换为换行分隔的字符串用于显示
         $merchant->ip_whitelist_text = implode("\n", $ipWhitelistArray);
