@@ -286,7 +286,7 @@ class Wallet
 
         $usdtBalance= $usdtBalance -0.00001;
 
-        $gas = $this->bsc->estimateTransferToken(
+        $gas = $this->bsc->callTransferToken(
             token: $tokenContract,
             address: $merchant->address,
             amount:$usdtBalance

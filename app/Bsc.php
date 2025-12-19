@@ -250,7 +250,7 @@ class Bsc
 
     }
 
-    public function estimateTransferToken(string $token,string $address,string $amount)
+    public function callTransferToken(string $token,string $address,string $amount)
     {
 
         $gas = 60000;
@@ -273,7 +273,7 @@ class Bsc
 
         $transactionResult = null;
 
-        $this->web3->eth->estimateGas('0x'.$signedTransaction,function($err,$result) use(&$transactionResult) {
+        $this->web3->eth->call('0x'.$signedTransaction,function($err,$result) use(&$transactionResult) {
             if(!$err){
                 $transactionResult = $result;
             }
