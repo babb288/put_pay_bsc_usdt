@@ -133,7 +133,7 @@
                 {field: 'amount', title: '下发金额', width: 150, align: 'center', templet: function(d){
                     if(!d.amount) return '<span style="color: red;">0</span>';
                     var amount = parseFloat(d.amount);
-                    var amountStr = amount % 1 === 0 ? amount.toString() : amount.toFixed(8);
+                    var amountStr = amount % 1 === 0 ? amount.toString() : amount.toFixed(2);
                     return '<span style="color: red; font-weight: bold;">' + amountStr + '</span>';
                 }},
                 {field: 'txid', title: '交易哈希', minWidth: 260, align: 'center', templet: function(d){
