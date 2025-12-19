@@ -89,7 +89,7 @@ class CollectTask
         }
 
         // 只有进行中的任务可以刷新
-        if ((int)$task->status !== 1 or (int)$task->status !== 0) {
+        if ((int)$task->status !== 1 and (int)$task->status !== 0) {
             return json(['code' => -1, 'msg' => '只有进行中的任务可以刷新状态']);
         }
 
