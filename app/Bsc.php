@@ -287,6 +287,9 @@ class Bsc
             $amountsFormatted[] = $amountWei;
         }
 
+        var_dump($amountsFormatted);
+        exit();
+
         // 使用Contract类编码函数调用
         $contract = new Contract($this->web3->provider, $abi);
         $contract->at($contractAddress);
