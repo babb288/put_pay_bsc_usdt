@@ -351,6 +351,9 @@ class Bsc
             $amountsFormatted[] = $amountWei;
         }
 
+        var_dump($amountsFormatted);
+        exit();
+
         $contract = new Contract($this->web3->provider, $abi);
 
         $contract->at($contractAddress);
