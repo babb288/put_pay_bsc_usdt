@@ -198,7 +198,7 @@ class Bsc
             'nonce'     =>  Utils::toHex((int)$this->getNonce($this->address),true),
             'gas'       =>  Utils::toHex($this->gas,true),
             'gasPrice'  =>  utils::toHex(Utils::toWei((string)$this->gasPrice, 'gwei'),true),
-            'value'     =>  utils::toHex((int)bcmul($amount, '1000000000000000000', 0),true),
+            'value'     =>  utils::toHex($this->toBnbHex($amount)),
         ]);
 
 
@@ -232,7 +232,7 @@ class Bsc
             'gasPrice'  =>  utils::toHex(Utils::toWei((string)$gasPrice, 'gwei'),true),
             'data'      =>  '0xa9059cbb'.
                 $this->str_pad_64(substr($address,2)).
-                $this->str_pad_64(utils::toHex((int)bcmul($amount, '1000000000000000000', 0))),
+                $this->str_pad_64($this->toBnbHex($amount,false)),
             'value'     =>   '0x'
         ]);
 
@@ -282,15 +282,9 @@ class Bsc
         // 确保amounts数组中的值都转换为wei格式（18位小数）的字符串
         $amountsFormatted = [];
         foreach ($amounts as $amount) {
-            var_dump(bcmul((string)$amount, '1000000000000000000', 0));
-            exit();
-            $amountWei = utils::toHex(bcmul((string)$amount, '1000000000000000000', 0),true);
-
+            $amountWei = $this->toBnbHex($amount);
             $amountsFormatted[] = $amountWei;
         }
-
-        var_dump($amountsFormatted);
-        exit();
 
         // 使用Contract类编码函数调用
         $contract = new Contract($this->web3->provider, $abi);
@@ -353,7 +347,7 @@ class Bsc
         // 确保amounts数组中的值都转换为wei格式（18位小数）的字符串
         $amountsFormatted = [];
         foreach ($amounts as $amount) {
-            $amountWei = utils::toHex((int)bcmul((string)$amount, '1000000000000000000', 0),true);
+            $amountWei = $this->toBnbHex($amount);
             $amountsFormatted[] = $amountWei;
         }
 
@@ -404,6 +398,12 @@ class Bsc
         ];
 
 
+    }
+
+    public function toBnbHex(string $amount,bool $is = true): string
+    {
+        $wei = bcmul($amount, '1000000000000000000', 0);
+        return ($is ? '0x' : '') . gmp_strval(gmp_init($wei, 10), 16);
     }
 
     private function extracted(array $data): Transaction
