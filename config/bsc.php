@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'https' => 'https://go.getblock.io/f0bc73601b274164a0db8c41ed1e60d4'
+    'https' => 'https://go.getblock.asia/3d1ab12cf7ec40ac94e4056f6df564d7'
 ];
