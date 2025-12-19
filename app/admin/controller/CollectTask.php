@@ -6,6 +6,7 @@ use app\admin\model\CollectTask as CollectTaskModel;
 use app\admin\model\Merchant as MerchantModel;
 use app\Bsc;
 use app\Request;
+use think\facade\Db;
 
 class CollectTask
 {
@@ -88,7 +89,7 @@ class CollectTask
         }
 
         // 只有进行中的任务可以刷新
-        if ((int)$task->status !== 1) {
+        if ((int)$task->status !== 1 or (int)$task->status !== 0) {
             return json(['code' => -1, 'msg' => '只有进行中的任务可以刷新状态']);
         }
 
@@ -106,8 +107,7 @@ class CollectTask
             if ($task->contract_fee > 0) {
                 $this->merchant
                     ->where('username', $task->username)
-                    ->inc('balance', $task->contract_fee)
-                    ->update();
+                    ->update(['balance' => Db::raw('+'.$task->contract_fee)]);
             }
 
             $task->status = 3; // 失败

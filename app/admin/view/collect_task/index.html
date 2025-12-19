@@ -97,7 +97,7 @@
         </script>
 
         <script type="text/html" id="currentTableBar">
-            {{# if(d.status == 1){ }}
+            {{# if(d.status == 1 || d.status == 0){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="refresh">刷新状态</a>
             {{# } }}
         </script>
