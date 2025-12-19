@@ -74,7 +74,6 @@ class Address
         }
 
 
-
         $list = $this->address->where($where)
             ->order($order)
             ->paginate([

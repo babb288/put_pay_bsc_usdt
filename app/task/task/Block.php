@@ -25,7 +25,7 @@ class Block
 
     public function run(): void
     {
-        swoole_timer_tick(2000, function ($timer_id){
+        swoole_timer_tick(4000, function ($timer_id){
             $this->start();
         });
         Swoole\Event::wait();

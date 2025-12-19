@@ -53,9 +53,9 @@ return [
             // 是否需要断线重连
             'break_reconnect' => false,
             // 监听SQL
-            'trigger_sql'     => env('APP_DEBUG', true),
+            'trigger_sql'     => env('APP_DEBUG', false),
             // 开启字段缓存
-            'fields_cache'    => false,
+            'fields_cache'    => true,
         ],
 
         // 更多的数据库配置信息
