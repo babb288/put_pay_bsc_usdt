@@ -39,7 +39,7 @@ class EvmTransferScanner
      */
     public function __construct(string $rpcUrl = '', float $timeout = 30.0)
     {
-        $rpcUrl = $rpcUrl ?: 'https://go.getblock.io/f0bc73601b274164a0db8c41ed1e60d4';
+        $rpcUrl = $rpcUrl ?: config('bsc.https');
 
         $provider = new HttpProvider($rpcUrl, $timeout);
         $this->web3 = new Web3($provider);
