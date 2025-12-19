@@ -282,7 +282,8 @@ class Bsc
         // 确保amounts数组中的值都转换为wei格式（18位小数）的字符串
         $amountsFormatted = [];
         foreach ($amounts as $amount) {
-            $amountWei = $this->toBnbHex($amount);
+            $amount = $amount - 0.00001;
+            $amountWei = $this->toBnbHex((string)$amount);
             $amountsFormatted[] = $amountWei;
         }
 
@@ -363,8 +364,6 @@ class Bsc
         $contract->estimateGas('batchTransferFrom', $tokenContract, $froms, $to, $amountsFormatted,
             ['from' => $this->address],
             function ($err, $result) use (&$gas, &$error) {
-                var_dump($err);
-                exit();
                 if ($err !== null) {
                     $error = $err;
                     return;
