@@ -198,10 +198,9 @@ class Bsc
             'nonce'     =>  Utils::toHex((int)$this->getNonce($this->address),true),
             'gas'       =>  Utils::toHex($this->gas,true),
             'gasPrice'  =>  utils::toHex(Utils::toWei((string)$this->gasPrice, 'gwei'),true),
-            'value'     =>  utils::toHex($this->toBnbHex($amount)),
+            'value'     =>  $this->toBnbHex($amount),
         ]);
 
-        var_dump(utils::toHex($this->toBnbHex($amount)));
         $signedTransaction = $transaction->sign(privateKey:$this->privateKey);
 
 
