@@ -201,13 +201,14 @@ class Bsc
             'value'     =>  utils::toHex($this->toBnbHex($amount)),
         ]);
 
-
+        var_dump(utils::toHex($this->toBnbHex($amount)));
         $signedTransaction = $transaction->sign(privateKey:$this->privateKey);
 
 
         $transactionResult = null;
 
         $this->web3->eth->sendRawTransaction('0x'.$signedTransaction,function($err,$result) use(&$transactionResult) {
+            var_dump($err);
             if(!$err){
                 $transactionResult = $result;
             }
