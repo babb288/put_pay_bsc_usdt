@@ -13,10 +13,9 @@ class Address extends Model
     
     // 字段类型转换
     protected $type = [
-        'balance' => 'float',
-        'bnb_balance' => 'float',
-        'status' => 'integer',
-        'is_authorized' => 'integer',
+        'bnb_balance'       => 'float',
+        'status'            => 'integer',
+        'is_authorized'     => 'integer',
     ];
 }
 
