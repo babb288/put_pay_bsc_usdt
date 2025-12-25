@@ -123,7 +123,7 @@ class Apply
             return json(['code' => -1, 'msg' => '当前订单状态不允许重发通知']);
         }
 
-        Queue::push('\app\task\callback\Pay', $order->toArray(), 'Pay');
+        Queue::push('\app\task\callback\Pay', $order->toArray(), 'pay');
 
         $order->save(['status' => 2]);
 
