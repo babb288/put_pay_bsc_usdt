@@ -61,7 +61,8 @@ Route::group(function(){
         
         // 代付订单路由
         Route::rule('apply/list','apply/list');
-        
+        Route::rule('apply/retryProcess','apply/retryProcess');
+        Route::rule('apply/resendNotify','apply/resendNotify');
         // 代收订单路由
         Route::rule('order/list','order/list');
         
