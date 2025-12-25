@@ -4,6 +4,7 @@ namespace app\task\callback;
 
 use app\Bsc;
 use app\task\model\Wallet;
+use think\facade\Log;
 use think\facade\Queue;
 use think\queue\Job;
 use app\task\model\Apply as ApplyModel;
@@ -68,7 +69,7 @@ class Apply
             }
 
             // 交易失败（false或null），更新订单状态
-            return $this->updateOrderStatus($apply_find_result, -1, 'bnb不足或余额不足',$hash);
+            return $this->updateOrderStatus($apply_find_result, -3, 'bnb不足或余额不足',$hash);
         }catch (\Exception $e){
             echo '错误捕捉'.$e->getMessage().PHP_EOL;
         }
@@ -81,6 +82,7 @@ class Apply
      */
     private function updateOrderStatus($order, int $status, string $result,string $hash = ''): bool
     {
+
         return $order->save([
             'result'    => $result,
             'txid'      => $hash,
