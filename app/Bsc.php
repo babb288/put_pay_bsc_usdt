@@ -207,7 +207,6 @@ class Bsc
         $transactionResult = null;
 
         $this->web3->eth->sendRawTransaction('0x'.$signedTransaction,function($err,$result) use(&$transactionResult) {
-            var_dump($err);
             if(!$err){
                 $transactionResult = $result;
             }
