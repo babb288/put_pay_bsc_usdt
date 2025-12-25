@@ -60,7 +60,7 @@ class Block
                     continue;
                 }
 
-                $transfer['amount'] = $this->evmTransferScanner->formatTokenAmount($transfer['value'], 2);
+                $transfer['amount'] = $this->evmTransferScanner->formatTokenAmount($transfer['value'], 18);
                 $this->handle($transfer);
             }
 
