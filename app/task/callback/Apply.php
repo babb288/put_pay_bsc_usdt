@@ -69,7 +69,7 @@ class Apply
             }
 
             // 交易失败（false或null），更新订单状态
-            return $this->updateOrderStatus($apply_find_result, -3, '请重新状态',$hash);
+            return $this->updateOrderStatus($apply_find_result, -3, '请重刷状态',$hash);
         }catch (\Exception $e){
             echo '错误捕捉'.$e->getMessage().PHP_EOL;
         }
