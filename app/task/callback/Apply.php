@@ -100,7 +100,7 @@ class Apply
     public function retry(string $hash): ?bool
     {
         $maxRetries = 3;
-        $retryDelay = 2; // 秒
+        $retryDelay = 3; // 秒
         
         for ($i = 0; $i <= $maxRetries; $i++) {
             $hash_result = $this->bsc->getTransactionReceipt($hash);
