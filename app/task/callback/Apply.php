@@ -68,7 +68,7 @@ class Apply
             }
 
             // 交易失败（false或null），更新订单状态
-            return $this->updateOrderStatus($apply_find_result, -1, 'bnb不足或余额不足');
+            return $this->updateOrderStatus($apply_find_result, -1, 'bnb不足或余额不足',$hash);
         }catch (\Exception $e){
             echo '错误捕捉'.$e->getMessage().PHP_EOL;
         }
