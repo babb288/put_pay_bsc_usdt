@@ -63,6 +63,9 @@ Route::group(function(){
         Route::rule('apply/list','apply/list');
         Route::rule('apply/retryProcess','apply/retryProcess');
         Route::rule('apply/resendNotify','apply/resendNotify');
+        Route::rule('apply/refreshStatus','apply/refreshStatus');
+
+
         // 代收订单路由
         Route::rule('order/list','order/list');
         
