@@ -146,7 +146,7 @@ class Apply
             return json(array('code' => -1,'msg' => '状态不正确'));
         }
 
-        $hash_result = $this->bsc->getTransactionReceipt($result->hash);
+        $hash_result = $this->bsc->getTransactionReceipt($result->txid);
 
         if($hash_result === null){
             return json(array('code' => -1,'msg' => '上链中,请重刷状态'));
