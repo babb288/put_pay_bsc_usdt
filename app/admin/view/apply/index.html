@@ -126,7 +126,7 @@
         <script type="text/html" id="currentTableBar">
             {{# if(d.status == -1){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="retryProcess">重新处理</a>
-            {{# if(d.status == -3){ }}
+            {{# } else if(d.status == -3){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="refreshStatus">刷新状态</a>
             {{# } else if(d.status == 3){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="resendNotify">重发通知</a>
