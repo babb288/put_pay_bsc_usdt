@@ -33,7 +33,8 @@
       "ext-curl": "*",
         "topthink/think-queue": "^3.0",
       "ext-bcmath": "*",
-        "web3p/ethereum-tx": "^0.4.3"
+        "web3p/ethereum-tx": "^0.4.3",
+      "ext-gmp": "*"
     },
     "require-dev": {
         "topthink/think-dumper": "^1.0",
