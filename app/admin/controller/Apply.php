@@ -154,12 +154,14 @@ class Apply
 
         if($hash_result === false){
             $result->status = -1;
+            $result->result = '';
             $result->save();
             return json(array('code' => -1,'msg' => '上链失败,请重新处理'));
         }
 
         if($hash_result){
             $result->status = 3;
+            $result->result = '';
             $result->save();
             return json(array('code' => 1,'msg' => '请重发通知'));
         }
