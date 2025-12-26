@@ -32,9 +32,10 @@ class Apply extends Validate
     ];
 
     protected $scene = [
-        'list' => ['page', 'limit', 'username', 'system_order', 'merchant_order', 'address', 'status'],
-        'retryProcess' => ['id'],
-        'resendNotify' => ['id'],
+        'list'          => ['page', 'limit', 'username', 'system_order', 'merchant_order', 'address', 'status'],
+        'retryProcess'  => ['id'],
+        'resendNotify'  => ['id'],
+        'refreshStatus' => ['id']
     ];
 }
 

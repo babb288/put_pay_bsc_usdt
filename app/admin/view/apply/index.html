@@ -126,6 +126,8 @@
         <script type="text/html" id="currentTableBar">
             {{# if(d.status == -1){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="retryProcess">重新处理</a>
+            {{# if(d.status == -3){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="refreshStatus">刷新状态</a>
             {{# } else if(d.status == 3){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="resendNotify">重发通知</a>
             {{# } }}
@@ -249,6 +251,26 @@
                             table.reload('currentTableId');
                         } else {
                             layer.msg(res.msg || '重新处理失败', {icon: 2});
+                        }
+                    }).fail(function(){
+                        layer.close(loadIndex);
+                        layer.close(index);
+                        layer.msg('网络错误', {icon: 2});
+                    });
+                });
+            }
+
+            if(obj.event === 'refreshStatus'){
+                layer.confirm('确定要重刷状态吗？', {icon: 3, title: '提示'}, function(index){
+                    var loadIndex = layer.load(1, {shade: [0.5, '#000']});
+                    $.post('/apply/refreshStatus', {id: data.id}, function(res){
+                        layer.close(loadIndex);
+                        layer.close(index);
+                        if(res.code === 1){
+                            layer.msg('重发通知成功', {icon: 1});
+                            table.reload('currentTableId');
+                        } else {
+                            layer.msg(res.msg || '重发通知失败', {icon: 2});
                         }
                     }).fail(function(){
                         layer.close(loadIndex);

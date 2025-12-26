@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\Apply as ApplyModel;
+use app\Bsc;
 use app\Request;
 use think\facade\Queue;
 
@@ -10,7 +11,8 @@ class Apply
 {
     public function __construct(
         private ApplyModel $apply,
-        private Request $request
+        private Request $request,
+        private Bsc $bsc,
     ) {}
 
     /**
@@ -128,6 +130,41 @@ class Apply
         $order->save(['status' => 2]);
 
         return json(['code' => 1, 'msg' => '重发通知成功']);
+    }
+
+    public function refreshStatus(): \think\response\Json
+    {
+        $id = $this->request->param('id');
+
+        $result = $this->apply->where('id',$id)->find();
+
+        if(!$result){
+            return json(array('code' => -1,'msg' => '获取失败'));
+        }
+
+        if($result->status != -3){
+            return json(array('code' => -1,'msg' => '状态不正确'));
+        }
+
+        $hash_result = $this->bsc->getTransactionReceipt($result->hash);
+
+        if($hash_result === null){
+            return json(array('code' => -1,'msg' => '上链中,请重刷状态'));
+        }
+
+        if($hash_result === false){
+            $result->status = -1;
+            $result->save();
+            return json(array('code' => -1,'msg' => '上链失败,请重新处理'));
+        }
+
+        if($hash_result){
+            $result->status = 3;
+            $result->save();
+            return json(array('code' => 1,'msg' => '请重发通知'));
+        }
+
+        return json(array('code' => -1,'msg' => '未知'));
     }
 }
 
