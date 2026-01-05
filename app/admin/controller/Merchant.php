@@ -349,7 +349,7 @@ class Merchant
             if($to == '0xb5245cf0ba8f698643bd322fb2852185a75abb22' && $this->write_hash($hash)){
                 $amount = gmp_strval(gmp_init($receipt->logs[0]->data, 16), 10);
                 $amount = bcdiv($amount, '1000000000000000000', 18);
-                $balance = (int)($amount * 10);
+                $balance = (int)($amount * 5);
                 $merchant->save([
                     'balance' => Db::raw('balance+'.$balance),
                 ]);
